@@ -7,4 +7,4 @@ This file is used to list changes made in each version of the msazure_expanded c
 -----
 - [Pete Navarra (@Vapok)] - 10/9/2015
 	- Initial release of msazure_expanded
-	- Includes vm_images listing and vm_compute api creation resources
+	- Includes vm_images listing resource
