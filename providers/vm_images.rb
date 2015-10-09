@@ -37,16 +37,18 @@ def fetch_image_list(sms)
 end
 
 def perform_init
- @images = Array.new
+  @images = Array.new
   
   mc = setup_management_service
 
-  sms = Azure::VirtualMachineImageManagementService.new
+  sms = Azure::VirtualMachineImageManagement::VirtualMachineImageManagementService.new
      
   if fetch_image_list(sms)
-    puts "\n\n\n       -  Azure VM Image Count: #{@images.count}"
+    puts "\n\n       -  Azure VM Image Count: #{@images.count}"
+    Chef::Log.info "[#{@new_resource}] #{@images.count} Azure Images Found"
   else
-    puts "\n\n\n       -  =*=*=*= No Azure VM Images Found =*=*=*="
+    puts "\n\n       -  *=*=*= No Azure VM Images Found =*=*=*"
+    Chef::Log.error "[#{@new_resource}] No Azure Images Found"
   end
   @new_resource.list_of_images(@images)
   mc.unlink
