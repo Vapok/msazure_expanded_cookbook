@@ -96,3 +96,44 @@ Attribute Parameters:
       action :run
     end
 ```
+
+msazure_expanded_vm_disks
+--------------------------
+
+## vm_disk.rb
+
+
+Loads available Azure VM Images with this resource into a resource attribute.
+
+Actions:
+
+* `list` - Provides array of Disk objects of all disks on subscription.
+* `get` - Gets disk information by disk name.
+
+Attribute Parameters:
+
+* `management_certificate` - PEM file contents of Azure management
+  certificate, required.
+* `subscription_id` - ID of Azure subscription, required.
+* `management_endpoint` - Endpoint for Azure API, defaults to `management.core.windows.net`.
+* `list_of_disks` - List of available images loaded during Action Init
+* `diskinfo` - Disk Info Object
+
+### Recipe Examples
+#### List Action
+```
+msazure_expanded_vm_disks 'disk_listing' do
+  management_certificate microsoft_azure['management_certificate'].join("\n")
+  subscription_id microsoft_azure['subscription_id']
+  action :list
+end
+```
+#### Get Action
+```
+  msazure_expanded_vm_disks "get_a_disk" do
+    management_certificate microsoft_azure['management_certificate'].join("\n")
+    subscription_id microsoft_azure['subscription_id']
+    diskname "VapokDev-VapokDev-0-201502261839060590"
+    action :get
+  end
+```

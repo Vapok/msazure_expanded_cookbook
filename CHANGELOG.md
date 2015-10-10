@@ -5,7 +5,8 @@ This file is used to list changes made in each version of the msazure_expanded c
 
 0.1.1
 -----
-
+- [Pete Navarra (@Vapok)] - 10/10/2015
+	- Added vm_disks :list and :get actions.
 
 0.1.0
 -----

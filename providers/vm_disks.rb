@@ -14,22 +14,53 @@ action :list do
   end
 end
 
+action :get do
+  if @current_resource.loaded
+    converge_by("Get Disk from #{@new_resource}") do
+      get_disk(@new_resource.diskname)
+    end
+  else
+    converge_by("Create #{ @new_resource } List, Then Get Disk") do
+      perform_list
+      get_disk(@new_resource.diskname)  
+    end
+  end
+end
+
 def load_current_resource
+  # Azure API Boilerplate
   @current_resource = Chef::Resource::MsazureExpandedVmDisks.new(@new_resource.name)
   @current_resource.name(@new_resource.name)
   @current_resource.management_certificate(@new_resource.management_certificate)
   @current_resource.subscription_id(@new_resource.subscription_id)
   @current_resource.management_endpoint(@new_resource.management_endpoint)
-  @current_resource.list_of_disks(@new_resource.list_of_disks || Array.new)
-  @current_resource.diskinfo(@new_resource.diskinfo || Array.new)
+  
+  # Attributes used for List Action
+  @current_resource.list_of_disks(@new_resource.list_of_disks || Array.new) #output
+  
 
+  # Attributes used for Get Action
+  @current_resource.diskname(@new_resource.diskname)
+  @current_resource.diskinfo(@new_resource.diskinfo || Array.new) #output
+
+  # Assign Attribute Accessors
   if disks_loaded?(@current_resource.list_of_disks)
     @current_resource.loaded = true
   else
     @current_resource.loaded = false
   end
 
+  #Return Current Resource
   @current_resource
+end
+
+def get_disk(disk_name)
+  disk = @new_resource.list_of_disks.select { |x| x.name == disk_name }
+  if disk.count > 0
+    diskinfo = Array.new
+    diskinfo.push(disk.first)
+    @new_resource.diskinfo(diskinfo)
+  end
 end
 
 def fetch_disk_list(sms)

@@ -14,13 +14,14 @@
 # limitations under the License.
 #--------------------------------------------------------------------------
 
-actions :list
+actions :list, :get
 
 attribute :management_certificate, :kind_of => String, :required => true
 attribute :subscription_id, :kind_of => String, :required => true
 attribute :management_endpoint, :kind_of => String, :default => 'https://management.core.windows.net/'
 attribute :list_of_disks, :kind_of => Array
 attribute :diskinfo, :kind_of => Array
+attribute :diskname, :kind_of => String
 
 attr_accessor :loaded
 attr_accessor :disks
